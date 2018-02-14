@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Draw GeoJSON points</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/pouchdb/6.4.3/pouchdb.min.js'></script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA'
+  //mapboxgl.accessToken = '<your access token here>'
+  const REMOTE_DB = 'http://localhost:5984/ollilocation'
+  //var PouchDB = require('pouchdb');
+  var db = new PouchDB(REMOTE_DB, {});
+
+  var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v9',
+      center: [-92.466, 44.0214],
+      zoom: 16
+  })
+
+  map.loadImage('olli-icon.png', (error, image) => {
+      if (error) {
+      throw error
+      } else {
+      this.map.addImage('olli-icon', image);
+      }
+  })
+  
+  map.on('load', function () {
+    map.addLayer({
+        'id': 'olli-location',
+        'type': 'symbol',
+        'source': {
+            'type': 'geojson',
+            'data': null
+        },
+        'layout': {
+            'icon-image': 'olli-icon'
+        }
+    })
+
+    db.changes({
+      since: 'now',
+      live: true,
+      include_docs: true
+    })
+      .on('change', change => {
+        console.log("Got a change...")
+        map.getSource('olli-location').setData(change.doc)
+      }).on('complete', info => {
+      }).on('paused', () => {
+      }).on('error', err => {
+        console.log(err);
+    });
+});
+
+</script>
+
+</body>
+</html>
