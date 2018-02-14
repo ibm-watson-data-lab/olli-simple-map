@@ -25,5 +25,5 @@ The following settings can be configured in the `.env` file:
 
 * `simulator_target_cloudant` -  Cloudant/CouchDB database url (fully qualified) to send events to (e.g, `http://username:password@127.0.0.1:5984/ollilocation`)
 * `simulator_number_of_runs` - number of times the simulator runs through the complete route (default: `-1` which mean infinite)
-* `simulator_stop_duration` - how long (in 10ths of a second) to wait at each stop (default: `25`)
-* `simulator_event_interval` - how long (in 10ths of a second) to wait before sending the next coordinate to the database (default: `5`)
+* `simulator_stop_duration` - how long (in milliseconds) to wait at each stop (default: `25`)
+* `simulator_event_interval` - how long (in milliseconds) to wait before sending the next coordinate to the database (default: `5`)

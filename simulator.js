@@ -4,8 +4,8 @@ const routeJson = require('./route.json')
 
 let config = {
   LAPS: process.env['simulator_number_of_runs'] || 1,
-  INTERVAL: (process.env['simulator_event_interval'] || 5) * 100,
-  STOPTIME: (process.env['simulator_stop_duration'] || 25) * 100,
+  INTERVAL: process.env['simulator_event_interval'] || 500,
+  STOPTIME: process.env['simulator_stop_duration'] || 2500,
   TARGET_CLOUDANT: process.env['simulator_target_cloudant'] || 'http://127.0.0.1:5984/ollilocation'
 }
 
